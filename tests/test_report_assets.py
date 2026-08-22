@@ -25,7 +25,7 @@ def test_readme_uses_github_supported_math_macros():
     assert r"\operatorname" not in readme
 
 
-def test_readme_preserves_theory_from_ipt_presentation():
+def test_readme_preserves_theory_developed_for_ipt_solution():
     readme = (PROJECT / "README.md").read_text(encoding="utf-8")
     equations = [
         r"\mathbf{J}_{\mathrm{tot}}=\sigma\mathbf{E}_{\mathrm{tot}}",
@@ -40,7 +40,16 @@ def test_readme_preserves_theory_from_ipt_presentation():
         assert equation in readme
 
 
-def test_reported_headline_values_are_preserved():
+def test_readme_describes_the_work_in_the_authors_voice():
+    readme = (PROJECT / "README.md").read_text(encoding="utf-8").lower()
+
+    assert "the presentation" not in readme
+    assert "we developed a model" in readme
+    assert "we compared" in readme
+    assert "we obtained" in readme
+
+
+def test_measured_headline_values_are_preserved():
     with (PROJECT / "data" / "ipt_report_summary.csv").open(encoding="utf-8", newline="") as stream:
         values = {row["quantity"]: float(row["value"]) for row in csv.DictReader(stream)}
 
