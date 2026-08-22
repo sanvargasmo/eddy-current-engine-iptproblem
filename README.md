@@ -66,13 +66,13 @@ The repository implements four connected components:
 The electromagnetic drive varies with relative phase as
 
 $$
-D(\phi)=\operatorname{Re}\!\left(C_D\sin\phi\right),
+D(\phi)=\mathrm{Re}\!\left(C_D\sin\phi\right),
 $$
 
 and the cycle-averaged torque is
 
 $$
-\langle\tau\rangle=\frac{\sigma\omega}{2}\operatorname{Re}\!\left[
+\langle\tau\rangle=\frac{\sigma\omega}{2}\mathrm{Re}\!\left[
 c_{11}B_1^2+c_{22}B_2^2+(c_{12}+c_{21})B_1B_2\cos\phi
 \right].
 $$
