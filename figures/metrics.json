@@ -1,0 +1,40 @@
+{
+  "phase_rad": 0.07,
+  "frequency_hz": 60.0,
+  "conductivity_s_per_m": 31959730.0,
+  "drive_geometry_factor_real": 0.02437697029097502,
+  "drive_geometry_factor_imag": -1.5464296074102296e-18,
+  "cycle_average_torque_n_m": -0.0022195334099693225,
+  "reduced_terminal_speed_rad_per_s": 0.3730720742680165,
+  "time_constant_s": 0.2,
+  "geometry_resolution": 256,
+  "reference_torque_coefficients_match_geometry": true,
+  "disk_geometry": {
+    "disk_1": {
+      "center": [
+        0.0,
+        0.0
+      ],
+      "radius": 0.04
+    },
+    "disk_2": {
+      "center": [
+        0.0,
+        -0.009
+      ],
+      "radius": 0.033935
+    },
+    "disk_3": {
+      "center": [
+        0.021,
+        -0.009
+      ],
+      "radius": 0.04
+    }
+  },
+  "areas_m2": {
+    "triple": 0.0026566083399350744,
+    "disk_2_disk_3_only": 6.62591726432917e-05,
+    "disk_1_disk_2_only": 0.0008429954727617621
+  }
+}

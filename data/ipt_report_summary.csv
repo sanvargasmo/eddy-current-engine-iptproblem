@@ -1,0 +1,9 @@
+quantity,value,unit,source_slide,provenance
+transient_displacement,24,mm,20,reported
+transient_input_voltage,90.0,V,20,reported
+transient_asymptote,14.72,rad/s,20,reported
+transient_fit_r_squared,0.9909,dimensionless,20,reported
+optimal_field_for_efficiency,0.0222,T,39,reported
+peak_efficiency,0.057,dimensionless,39,read_from_plot
+highest_phase_sweep_position,18,mm,37,read_from_plot
+highest_phase_sweep_phase,1.57,rad,37,read_from_plot

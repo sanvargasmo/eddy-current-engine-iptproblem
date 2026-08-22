@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eddy-current-engine"
+version = "0.1.0"
+description = "IPT Eddy Current Engine results, three-disk geometry, torque, and reduced rotor dynamics."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Santiago Vargas"}]
+dependencies = [
+  "matplotlib>=3.8",
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "shapely>=2.0",
+]
+
+[project.optional-dependencies]
+notebooks = ["ipykernel>=6.29", "jupyterlab>=4.2", "nbclient>=0.10", "nbformat>=5.9", "pandas>=2.1", "pillow>=10", "sympy>=1.12"]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

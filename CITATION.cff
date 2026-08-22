@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Eddy Current Engine"
+type: software
+authors:
+  - given-names: Santiago
+    family-names: Vargas
+version: 0.1.0
+date-released: 2026-08-21
+repository-code: "https://github.com/sanvargasmo/eddy-current-engine-iptproblem"
