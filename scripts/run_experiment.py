@@ -16,9 +16,11 @@ from eddy_current_engine import (
     ElectromagneticParameters,
     GeometryParameters,
     analyze_geometry,
+    comparison_statistics,
     cycle_average_torque,
     drive_geometry_factor,
     instantaneous_torque,
+    load_position_comparison,
     normalized_rotor,
     phase_drive,
     reduced_terminal_speed,
@@ -28,7 +30,11 @@ from eddy_current_engine.visualization import (
     plot_phase_response,
     plot_torque_cycle,
     plot_transient,
+    plot_theory_experiment_comparison,
 )
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def parser() -> argparse.ArgumentParser:
@@ -53,6 +59,12 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--disk-3-y", type=float, default=-0.009)
     result.add_argument("--disk-3-radius", type=float, default=0.040)
     result.add_argument("--output-dir", type=Path, default=Path("results/eddy_current"))
+    result.add_argument(
+        "--comparison-data",
+        type=Path,
+        default=PROJECT_ROOT / "data" / "ipt_position_comparison.csv",
+        help="CSV containing the calibrated position comparison.",
+    )
     return result
 
 
@@ -122,12 +134,14 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     time = np.linspace(0.0, args.t_final, args.points)
     rotor = normalized_rotor(terminal_speed, args.time_constant)
     speed = rotor.angular_speed(time)
+    comparison = load_position_comparison(args.comparison_data)
 
     figures = {
         "geometry": output_dir / "geometry.png",
         "phase_response": output_dir / "phase_response.png",
         "torque_cycle": output_dir / "torque_cycle.png",
         "rotor_transient": output_dir / "rotor_transient.png",
+        "theory_vs_experiment": output_dir / "theory_vs_experiment.png",
     }
     plot_geometry(geometry, figures["geometry"])
     plot_phase_response(phases, drive, args.phase, figures["phase_response"])
@@ -138,6 +152,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         figures["torque_cycle"],
     )
     plot_transient(time, speed, terminal_speed, figures["rotor_transient"])
+    plot_theory_experiment_comparison(comparison, figures["theory_vs_experiment"])
     plt.close("all")
 
     reference_geometry = GeometryParameters()
@@ -159,6 +174,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
             "disk_3": {"center": [args.disk_3_x, args.disk_3_y], "radius": args.disk_3_radius},
         },
         "areas_m2": {name: item.area for name, item in measurements.items()},
+        "theory_experiment_comparison": comparison_statistics(comparison),
     }
     (output_dir / "metrics.json").write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
     return metrics
@@ -170,6 +186,7 @@ def main() -> None:
     print(f"Results: {args.output_dir}")
     print(f"Reduced terminal speed: {metrics['reduced_terminal_speed_rad_per_s']:.8g} rad/s")
     print(f"Cycle-average torque: {metrics['cycle_average_torque_n_m']:.8g} N m")
+    print(f"Theory/experiment figure: {args.output_dir / 'theory_vs_experiment.png'}")
     if not metrics["reference_torque_coefficients_match_geometry"]:
         print("Warning: disk geometry changed; recompute the torque coefficients for quantitative use.")
 
