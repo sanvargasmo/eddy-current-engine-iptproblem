@@ -54,28 +54,260 @@ Detailed provenance and the distinction between reported, digitized, and compute
 
 ![Three-disk overlap geometry](figures/geometry.png)
 
-## Model scope
+## Theory from the IPT presentation
 
-The repository implements four connected components:
+This section follows the physical model and notation developed in slides 31-39 and in the theory appendix, slides 45-52. The engine is treated as a shaded-pole induction motor: two time-dependent magnetic-field regions overlap the conducting aluminium disk with a relative phase. Their changing flux produces eddy currents. Because the current pattern is spatially asymmetric, the cross-interaction between the current induced by one field and the other magnetic field produces a net torque.
 
-1. Polygonally converged overlap areas, centroids, and radial widths for three disks.
-2. The complex geometric drive prefactor translated from the original Mathematica expression.
-3. Numerical torque coefficients and their instantaneous and cycle-averaged response.
-4. A transparent first-order rotor model, $I\dot{\omega}=\tau_{\mathrm{drive}}-\gamma\omega$.
+### 1. Flux-preserving magnetic-field model
 
-The electromagnetic drive varies with relative phase as
+The presentation replaces each finite field patch by a concentrated source with the same magnetic flux. In polar coordinates on a disk of radius $R$,
 
 $$
-D(\phi)=\mathrm{Re}\!\left(C_D\sin\phi\right),
+\mathbf{B}_1(\rho,\theta,t)
+=\hat{\mathbf z}\,A_1B_{01}\cos(\Omega t)
+\frac{1}{\rho}\delta(\rho-\rho_{01})\delta(\theta-\theta_{01}),
 $$
 
-and the cycle-averaged torque is
+$$
+\mathbf{B}_2(\rho,\theta,t)
+=\hat{\mathbf z}\,A_2B_{02}\cos(\Omega t-\varphi)
+\frac{1}{\rho}\delta(\rho-\rho_{02})\delta(\theta-\theta_{02}).
+$$
+
+Here $A_1$ and $A_2$ are the disk areas threaded by the two fields, $(\rho_{0i},\theta_{0i})$ locate their effective centers, $\Omega$ is the electrical angular frequency, and $\varphi$ is the phase difference.
+
+The second source is labelled consistently with the later derivation as $(\rho_{02},\theta_{02})$; the field-definition slide itself repeats the subscript $01$ on that line.
+
+### 2. Induced electric field and eddy currents
+
+For a stationary conductor, Ohm's law and the electrostatic correction inside the finite disk are
 
 $$
-\langle\tau\rangle=\frac{\sigma\omega}{2}\mathrm{Re}\!\left[
-c_{11}B_1^2+c_{22}B_2^2+(c_{12}+c_{21})B_1B_2\cos\phi
-\right].
+\mathbf{J}_{\mathrm{tot}}=\sigma\mathbf{E}_{\mathrm{tot}},
+\qquad
+\mathbf{E}_{\mathrm{tot}}=\mathbf{E}_{\mathrm{ind}}-\nabla\Phi.
 $$
+
+The induced field is written with the two-dimensional Biot-Savart-like expression used in the presentation:
+
+$$
+\mathbf{E}_{\mathrm{ind}}(\mathbf r,t)
+=\frac{1}{2\pi}\int_{\mathbb{R}^2}
+\frac{\partial B_z(\mathbf r',t)}{\partial t}
+\frac{\hat{\mathbf z}\times(\mathbf r-\mathbf r')}
+{\lvert\mathbf r-\mathbf r'\rvert^2}\,d^2\mathbf r'.
+$$
+
+The induced field alone does not satisfy the disk boundary. Charge accumulates at the edge until the normal current vanishes:
+
+$$
+\left.\mathbf{J}\cdot\hat{\mathbf n}\right|_{\rho=R}=0,
+\qquad
+\left.E_{\mathrm{ind},\rho}\right|_{\rho=R}
+=\left.\frac{\partial\Phi}{\partial\rho}\right|_{\rho=R}.
+$$
+
+Inside the disk, the harmonic potential can be expanded as
+
+$$
+\Phi(\rho,\theta)=A_0+
+\sum_{n=1}^{\infty}\frac{\rho^n}{n}
+\left[
+\frac{\alpha_n}{R^{n-1}}\cos(n\theta)
++\frac{\beta_n}{R^{n-1}}\sin(n\theta)
+\right],
+$$
+
+with, for field 1,
+
+$$
+\alpha_n=-\frac{1}{2\pi}
+\frac{\dot B_1(t)\rho_{01}^{n}}{R^{n+1}}\sin(n\theta_{01}),
+\qquad
+\beta_n=\frac{1}{2\pi}
+\frac{\dot B_1(t)\rho_{01}^{n}}{R^{n+1}}\cos(n\theta_{01}).
+$$
+
+The total field used to calculate the current density is therefore
+
+$$
+\mathbf{E}_{\mathrm{tot}}^{(1)}(\rho,\theta,t)
+=\left(E_{\rho}^{(1)}(\rho,\theta,t),
+E_{\theta}^{(1)}(\rho,\theta,t)\right)
+=\mathbf{E}_{\mathrm{ind}}^{(1)}-\nabla\Phi.
+$$
+
+The closed analytic components and their spatial current-density visualization are implemented in `notebooks/Analytic_Current_Visualization.ipynb`.
+
+### 3. Driving torque
+
+The electromagnetic torque follows from the Lorentz force density:
+
+$$
+\boldsymbol{\tau}
+=\int_V \mathbf r\times
+\left[\mathbf J(\mathbf r)\times\mathbf B(\mathbf r)\right]\,dV.
+$$
+
+In the presentation, the self-term produced by $\mathbf J_n$ in its own field $\mathbf B_n$ gives zero net torque. The nonzero contribution comes from the cross-terms $\tau_{12}+\tau_{21}$ and is proportional to $\sin\varphi$. After collecting the geometry into $G_{\mathrm{drive}}$,
+
+$$
+\tau_{\mathrm{drive}}
+=G_{\mathrm{drive}}(R,\rho_{01},\rho_{02},\theta_{01},\theta_{02})
+A_1A_2B_0^2h\sigma\Omega\sin\varphi.
+$$
+
+Thus the phase lag created by the shaded-pole geometry is essential: the driving torque vanishes when $\varphi=0$ or $\pi$.
+
+For the symmetric reference case $\rho_{01}=\rho_{02}=c$, $\theta_{01}=0$, and $\theta_{02}=\pi/2$, the appendix obtains
+
+$$
+\tau=
+\frac{A_1A_2B_{01}B_{02}h(c^2-R^2)^2\sigma\Omega\sin\varphi}
+{4\pi(c^4+R^4)},
+$$
+
+which reproduces the induction-motor reference result used in the presentation.
+
+### 4. Motion-induced current and damping torque
+
+Once the disk rotates, the current density includes the motional term:
+
+$$
+\mathbf J=\sigma\left(\mathbf E+\mathbf v\times\mathbf B\right).
+$$
+
+Under the magnetoquasistatic approximation,
+
+$$
+\nabla\cdot\mathbf J(\mathbf r,t)=0,
+$$
+
+and the free charge density associated with a rotating radial field profile is
+
+$$
+\rho_f(r,\theta,t)
+=-\varepsilon_0\omega
+\left(2B+r\frac{\partial B}{\partial r}\right).
+$$
+
+For an annular magnetic-field sector, the presentation models
+
+$$
+B(\rho,\theta,t)=B_0(t)
+\Theta(\rho-R_1)\Theta(R_2-\rho)
+\Theta(\theta-\theta_1)\Theta(\theta_2-\theta),
+$$
+
+and obtains the potential generated by $\rho_f$ from the two-dimensional Poisson solution
+
+$$
+V(\mathbf r)=-\frac{1}{2\pi\varepsilon_0}
+\int \rho_f(\mathbf r')\ln\lvert\mathbf r-\mathbf r'\rvert\,d^2\mathbf r'.
+$$
+
+The displacement current is negligible for aluminium at $60\,\mathrm{Hz}$ because
+
+$$
+\frac{J_d}{J_c}\sim\frac{\varepsilon_0\Omega}{\sigma}\sim10^{-16}.
+$$
+
+The resulting damping torque is linear in the mechanical angular velocity:
+
+$$
+\tau_{\mathrm{damp}}
+=-\frac{h\sigma\omega(t)B_0^2}{2}
+\left(C_{11}+C_{12}\cos\varphi+C_{22}\right),
+$$
+
+where $C_{11}$, $C_{12}$, and $C_{22}$ are geometric constants determined by the dimensions and positions of the two annular sections.
+
+### 5. Rotor dynamics and terminal angular velocity
+
+The disk dynamics combine the driving, damping, and friction torques:
+
+$$
+I\frac{d\omega}{dt}
+=\tau_{\mathrm{drive}}+\tau_{\mathrm{damp}}+I\alpha_{\mathrm{fr}}.
+$$
+
+Using the sign convention reported in the presentation, the terminal angular velocity is
+
+$$
+\omega_{\max}
+=-
+\frac{2\left[
+G_{\mathrm{drive}}A_1A_2B_0^2h\sigma\Omega\sin\varphi
+-I\alpha_{\mathrm{fr}}
+\right]}
+{h\sigma B_0^2
+\left(C_{11}+C_{12}\cos\varphi+C_{22}\right)}.
+$$
+
+This expression explains why the speed depends non-monotonically on disk position: changing the position changes $A_1$, $A_2$, $G_{\mathrm{drive}}$, the damping constants, and the measured friction term. It also provides the phase sweep shown in the presentation.
+
+### 6. Efficiency and its optimum
+
+The presentation defines efficiency by comparing the mean rotational kinetic energy with the injected energy over one electrical cycle $\mathcal{T}$:
+
+$$
+\eta=\frac{\langle K_{\mathrm{rot}}\rangle_{\mathcal T}}
+{\langle E_{\mathrm{in}}\rangle_{\mathcal T}},
+\qquad
+\langle E_{\mathrm{in}}\rangle_{\mathcal T}=\mathcal T aB_0^2,
+$$
+
+$$
+\eta=\frac{\tfrac12 I_{\mathrm{rot}}\omega_{\max}^2}
+{\mathcal T aB_0^2}.
+$$
+
+Substituting the terminal speed gives the field-dependent efficiency used for the reported optimization:
+
+$$
+\eta(B_0)=\frac{I_{\mathrm{rot}}}{2\mathcal T aB_0^2}
+\left[
+-\frac{2\left(
+G_{\mathrm{drive}}A_1A_2B_0^2h\sigma\Omega\sin\varphi
+-I_{\mathrm{rot}}\alpha_{\mathrm{fr}}
+\right)}
+{h\sigma B_0^2
+\left(C_{11}+C_{12}\cos\varphi+C_{22}\right)}
+\right]^2.
+$$
+
+Its optimum magnetic-field amplitude is
+
+$$
+B_{0,\eta_{\max}}
+=\sqrt{
+\frac{3I_{\mathrm{rot}}\lvert\alpha_{\mathrm{fr}}\rvert}
+{\left\lvert
+G_{\mathrm{drive}}A_1A_2h\sigma\Omega\sin\varphi
+\right\rvert}}
+=0.0222\,\mathrm{T}
+$$
+
+for the parameters used in the presentation.
+
+### Main symbols
+
+| Symbol | Meaning |
+|---|---|
+| $R$ | disk radius |
+| $A_1,A_2$ | disk areas threaded by magnetic fields 1 and 2 |
+| $B_0$ | magnetic-field amplitude |
+| $h$ | disk thickness |
+| $\sigma$ | electrical conductivity of aluminium |
+| $\Omega$ | electrical angular frequency of the magnetic field |
+| $\omega$ | mechanical angular velocity of the disk |
+| $\varphi$ | temporal phase difference between the two fields |
+| $I$ or $I_{\mathrm{rot}}$ | rotor moment of inertia |
+| $\alpha_{\mathrm{fr}}$ | signed angular deceleration associated with friction |
+| $G_{\mathrm{drive}}$ | driving-torque geometry factor |
+| $C_{11},C_{12},C_{22}$ | damping-torque geometry constants |
+
+The presentation cites D. J. Griffiths, *Introduction to Electrodynamics*, 4th ed., Section 7.2.2, for the induced-field construction, and Jose Arnaldo Redinz, *The Induction Motor* (2015), for the shaded-pole reference case.
 
 The reference numerical coefficients are regression-tested against the original sector integrations. They belong to the reference disk geometry. If the disk centers or radii are changed, the geometry and drive factor are updated immediately, but the torque coefficients must be recomputed in `notebooks/Coefficient_Integration.ipynb` before interpreting the torque quantitatively.
 
