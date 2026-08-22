@@ -7,6 +7,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
+from .comparison import PositionComparison
 from .geometry import GeometryAnalysis
 
 
@@ -117,4 +118,47 @@ def plot_transient(
     )
     ax.grid(alpha=0.22)
     ax.legend(frameon=False)
+    return _save(fig, output)
+
+
+def plot_theory_experiment_comparison(
+    data: PositionComparison,
+    output: str | Path | None = None,
+) -> plt.Figure:
+    """Plot the calibrated terminal-speed prediction against the measurements."""
+
+    fig, ax = plt.subplots(figsize=(7.2, 4.8))
+    ax.errorbar(
+        data.position_mm,
+        data.theoretical_rad_per_s,
+        yerr=data.theoretical_uncertainty_rad_per_s,
+        fmt="o",
+        ms=5.5,
+        color="#111827",
+        ecolor="#111827",
+        capsize=3.0,
+        elinewidth=1.2,
+        label=r"Theoretical $\omega_{\max}$ with $\alpha_{\mathrm{fric}}(y)$",
+    )
+    ax.errorbar(
+        data.position_mm,
+        data.experimental_rad_per_s,
+        yerr=data.experimental_uncertainty_rad_per_s,
+        fmt="s",
+        ms=5.2,
+        color="#dc2626",
+        ecolor="#dc2626",
+        capsize=3.0,
+        elinewidth=1.2,
+        label=r"Experimental $\omega_{\max}$",
+    )
+    ax.set(
+        xlabel=r"Disk position $y$ (mm)",
+        ylabel=r"Terminal angular speed $\omega_{\max}$ (rad/s)",
+        title="Calibrated theory versus experiment",
+        xlim=(-2.0, 44.0),
+        ylim=(-0.8, 17.0),
+    )
+    ax.grid(alpha=0.20)
+    ax.legend(frameon=False, loc="lower center")
     return _save(fig, output)
