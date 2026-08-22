@@ -1,4 +1,5 @@
 import csv
+import re
 from pathlib import Path
 
 
@@ -23,6 +24,7 @@ def test_readme_uses_github_supported_math_macros():
     readme = (PROJECT / "README.md").read_text(encoding="utf-8")
 
     assert r"\operatorname" not in readme
+    assert re.search(r"\$[^$\n]+\$\s*-\s*\$", readme) is None
 
 
 def test_readme_preserves_theory_developed_for_ipt_solution():
