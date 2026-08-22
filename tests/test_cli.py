@@ -30,4 +30,8 @@ def test_cli_smoke(tmp_path: Path):
     metrics = json.loads((output / "metrics.json").read_text(encoding="utf-8"))
     assert "Results:" in completed.stdout
     assert metrics["reduced_terminal_speed_rad_per_s"] > 0.0
-    assert len(list(output.glob("*.png"))) == 4
+    assert len(list(output.glob("*.png"))) == 5
+    assert (output / "theory_vs_experiment.png").stat().st_size > 0
+    comparison = metrics["theory_experiment_comparison"]
+    assert comparison["point_count"] == 8
+    assert comparison["experimental_peak_position_mm"] == 18.0
