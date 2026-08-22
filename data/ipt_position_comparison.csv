@@ -1,0 +1,9 @@
+position_mm,position_uncertainty_mm,theoretical_rad_per_s,theoretical_uncertainty_rad_per_s,experimental_rad_per_s,experimental_uncertainty_rad_per_s,alpha_fric_rad_per_s2,alpha_fric_uncertainty_rad_per_s2,provenance
+0,0,0,0,0,0.20,,,report_slide_36_digitized
+6,0,0.43,0.25,0,0.20,,,report_slide_36_digitized
+12,1.5,11.75,0.25,13.50,0.40,0.575711,0.0112882,drive_workbook_and_report_slide_36
+18,1.5,16.15,0.20,15.20,0.35,0.579652,0.00466232,drive_workbook_and_report_slide_36
+24,1.5,14.48,0.20,14.72,0.30,0.531946,0.0154725,drive_workbook_and_report_slide_36
+30,1.5,8.10,0.25,8.20,0.30,0.510499,0.00561122,drive_workbook_and_report_slide_36
+36,1.5,1.65,0.45,3.05,0.40,0.635345,0.0360267,drive_workbook_and_report_slide_36
+42,0,0,0,0,0.20,,,report_slide_36_digitized
