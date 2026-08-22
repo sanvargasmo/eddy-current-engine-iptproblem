@@ -18,8 +18,8 @@ The report combines three evidence levels:
 2. **Calibrated theory:** the position and phase sweeps, which use the geometric model together with experimentally determined friction.
 3. **Analytic field calculation:** the current-density field and sector-integrated torque coefficients.
 
-The reusable package and notebooks reproduce the analytic geometry, drive, current-density, torque, and reduced dynamics calculations. The images above remain the canonical record of the final IPT calibration shown by the reporter. The command-line example is an exploratory reduced model and should not be confused with the presentation's calibrated $14.72\,\mathrm{rad\,s^{-1}}$ result.
+The reusable package and notebooks reproduce the analytic geometry, drive, current-density, torque, and reduced dynamics calculations. The command-line runner also recreates the position comparison as `theory_vs_experiment.png` from the audited table `data/ipt_position_comparison.csv`. The independent command-line transient remains an exploratory reduced model and should not be confused with the presentation's calibrated $14.72\,\mathrm{rad\,s^{-1}}$ result.
 
 ## Audited experimental source
 
-The associated experimental workbooks in the private project Drive include position-dependent friction fits. They were reviewed to confirm that the report's position comparison includes measured friction rather than the uncalibrated first-order demonstration originally shown in this repository. The private raw measurements are intentionally not duplicated in this public repository.
+The associated experimental workbooks in the project Drive include position-dependent friction fits. Their fitted coefficients at $y=12,18,24,30,36\,\mathrm{mm}$ are included in `data/ipt_position_comparison.csv`. The plotted terminal speeds and error bars were transcribed from slide 36 of the final report, with the independently reported $14.72\,\mathrm{rad\,s^{-1}}$ asymptote retained at $y=24\,\mathrm{mm}$. The table records this provenance row by row; the full time-series workbooks are not duplicated in the public repository.
