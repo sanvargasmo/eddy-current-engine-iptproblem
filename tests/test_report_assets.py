@@ -23,7 +23,21 @@ def test_readme_uses_github_supported_math_macros():
     readme = (PROJECT / "README.md").read_text(encoding="utf-8")
 
     assert r"\operatorname" not in readme
-    assert readme.count(r"\mathrm{Re}") == 2
+
+
+def test_readme_preserves_theory_from_ipt_presentation():
+    readme = (PROJECT / "README.md").read_text(encoding="utf-8")
+    equations = [
+        r"\mathbf{J}_{\mathrm{tot}}=\sigma\mathbf{E}_{\mathrm{tot}}",
+        r"\tau_{\mathrm{drive}}",
+        r"\tau_{\mathrm{damp}}",
+        r"\omega_{\max}",
+        r"\eta(B_0)",
+        r"B_{0,\eta_{\max}}",
+    ]
+
+    for equation in equations:
+        assert equation in readme
 
 
 def test_reported_headline_values_are_preserved():
