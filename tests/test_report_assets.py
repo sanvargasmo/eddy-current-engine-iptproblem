@@ -19,6 +19,13 @@ def test_readme_uses_ipt_report_figures():
         assert (PROJECT / "figures" / filename).stat().st_size > 20_000
 
 
+def test_readme_uses_github_supported_math_macros():
+    readme = (PROJECT / "README.md").read_text(encoding="utf-8")
+
+    assert r"\operatorname" not in readme
+    assert readme.count(r"\mathrm{Re}") == 2
+
+
 def test_reported_headline_values_are_preserved():
     with (PROJECT / "data" / "ipt_report_summary.csv").open(encoding="utf-8", newline="") as stream:
         values = {row["quantity"]: float(row["value"]) for row in csv.DictReader(stream)}
