@@ -352,12 +352,7 @@ python scripts/run_experiment.py \
   --output-dir results/example
 ```
 
-This creates five figures and a machine-readable `metrics.json`. In particular,
-`results/example/theory_vs_experiment.png` reproduces the calibrated comparison
-between the model and the experimental terminal speeds shown above. The values and
-uncertainties used for that figure are in `data/ipt_position_comparison.csv`, and a
-different compatible table can be supplied with `--comparison-data`. To inspect all
-options:
+This creates four figures and a machine-readable `metrics.json`. To inspect all options:
 
 ```bash
 python scripts/run_experiment.py --help
