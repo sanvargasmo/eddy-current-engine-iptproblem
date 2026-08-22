@@ -20,7 +20,7 @@ We fitted the measured transient with an exponential approach to the terminal sp
 
 ### Theory versus experiment
 
-We compared the terminal angular velocity predicted by our model, including the measured position-dependent friction coefficient $\alpha_{\mathrm{fric}}(y)$, with the experimental values. Both exhibit the same non-monotonic dependence on position and locate the high-speed region near $y=18$-$24\,\mathrm{mm}$.
+We compared the terminal angular velocity predicted by our model, including the measured position-dependent friction coefficient $\alpha_{\mathrm{fric}}(y)$, with the experimental values. Both exhibit the same non-monotonic dependence on position and locate the high-speed region near $y\in[18,24]\,\mathrm{mm}$.
 
 ![Theoretical and experimental terminal angular velocity versus position](figures/ipt_theory_experiment.jpg)
 
